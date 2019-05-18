@@ -1,7 +1,10 @@
 #include<stdio.h>
-#include"graph.c"
-#include"player.h"
+#include"graph.h"
 int main(){
-  _debug_show_words();
+  welcome();
   getchar();
+  player *p1=new_player();
+  player *p2=new_player();
+  p1->doing=ask(*p1,*p2);
+  win();
 }
