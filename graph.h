@@ -1,32 +1,28 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include"player.h"
-#define MAXLEN (40)
-#define WORDS (14)
+#define MAXLEN (60)
+#define WORDS (15)
 char words[WORDS][MAXLEN];
 FILE *ferr;
 int initialized = 0;
-void graph_initialize();
 void error(char *s){
   if (ferr){
     fprintf(ferr,"ERROR!%s\n",s);
   }
-}
-//debug function
-void _debug_show_words(){
-  graph_initialize();
-  for(int i=0;i<WORDS;i++){
-    printf("%s\n",words[i]);
-  }
+  printf("ERROR!%s\n",s);
 }
 void graph_initialize(){
   if (initialized) return;
+  ferr = fopen("error.sys","w");
+  fclose(ferr);
   ferr = fopen("error.sys","a");
   if (!ferr) {
     printf("ERROR!");
     fflush(stdout);
   }
-  FILE *fp = fopen("language/Chinese","r");
+  //FILE *fp = fopen("language/Chinese","r");
+  FILE *fp = fopen("language/English","r");
   if (!fp){
     printf("ERROR in open language file!");
     fflush(stdout);
@@ -39,13 +35,20 @@ void graph_initialize(){
   }
   initialized = 1;
 }
+//debug function
+void _debug_show_words(){
+  graph_initialize();
+  for(int i=0;i<WORDS;i++){
+    printf("%s\n",words[i]);
+  }
+}
 void print(int i){
   graph_initialize();
-  system("clear");
   printf("%s\n",words[i]);
   fflush(stdout);
 }
 void welcome(){
+  system("clear");
   print(0);
 }
 void win(){
@@ -54,12 +57,14 @@ void win(){
 void lose(){
   print(2);
 }
+void endgame(int mode){
+  mode>0?win():lose();
+}
 void print_player_doing(player p){
   printf("%s%s\n",p.name,words[10+p.doing]);
 }
 int ask(player p1, player p2){
   graph_initialize();
-  system("clear");
   printf("%s\n",words[3]);
   printf("%4d%4d\n",p1.energy,p2.energy);
   print_player_doing(p1);
